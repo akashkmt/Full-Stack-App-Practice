@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
     email: String,
     password: {
         type: String,
-        select: true
+        select: false
     },
     image: String
     },{

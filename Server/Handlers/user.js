@@ -33,7 +33,7 @@ const createUser = async (req, res) => {
 const userLogin = async (req, res) => {
     try {
         const {email, password} = req.body;
-        let user = await User.findOne({email});
+        let user = await User.findOne({email}).populate('password');
         // console.log(user);
         if (!user) {
             return res.status(400).send({message: 'User does not exist'});
@@ -58,11 +58,22 @@ const userLogin = async (req, res) => {
     }
 }
 
-
+const checkUserByToken = async (req, res) => {
+    try {
+        let {token} = req.headers;
+        let decoded = jwt.verify(token, 'SFG()ASG#@1963XYZ');
+        if(decoded){
+            return res.status(200).send({token});
+        }
+    } catch (error) {
+        return res.status(500).send({message: error.message});
+    }
+}
 
 
 module.exports = {
     getAllUsers,
     createUser,
-    userLogin
+    userLogin,
+    checkUserByToken
 }
